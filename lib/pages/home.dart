@@ -1,5 +1,5 @@
-import 'package:codebook/models/category_model.dart';
-import 'package:codebook/models/diet_model.dart';
+import 'package:breakfast/models/category_model.dart';
+import 'package:breakfast/models/diet_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
