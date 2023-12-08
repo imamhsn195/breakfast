@@ -1,9 +1,10 @@
 import 'package:codebook/models/category_model.dart';
+import 'package:codebook/models/diet_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatefulWidget {
-   HomePage({super.key});
+   const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -11,13 +12,16 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<CategoryModel> categories = [];
+  List<DietModel> diets = [];
 
-  void _getCategories (){
+  void _getInitialInfo (){
     categories = CategoryModel.getCategories();
+    diets = DietModel.getDiets();
   }
+
   @override
   Widget build(BuildContext context) {
-    _getCategories();
+    _getInitialInfo();
     return  Scaffold(
       appBar: appBar(),
       backgroundColor: Colors.white ,
@@ -27,10 +31,13 @@ class _HomePageState extends State<HomePage> {
           _searchField(),
           const SizedBox(height: 40,),
           _categoriesSection(),
+          const SizedBox(height: 20,),
+          _dietSection()
         ],
       ),
     );
   }
+
   AppBar appBar() {
     return AppBar(
       title: const Text(
@@ -195,5 +202,90 @@ class _HomePageState extends State<HomePage> {
             )
           ],
         );
+  }
+  Column _dietSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(left: 20),
+          child: Text("Recommended for diet",
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+                fontWeight: FontWeight.w600
+            ),
+          ),
+        ),
+        const SizedBox(height: 15,),
+        Container(
+          height: 190,
+          child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index){
+                return Container(
+                  width: 210,
+                  decoration: BoxDecoration(
+                      color: diets[index].boxColor.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(20)
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SvgPicture.asset(diets[index].iconPath),
+                      Text(
+                        diets[index].name,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        diets[index].level + ' | ' + diets[index].duration + ' | ' + diets[index].calore,
+                        style: TextStyle(
+                            color: Color(0xff7B6F72),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400
+                        ),
+                      ),
+                      Container(
+                        height: 45,
+                        width: 130,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [
+                                diets[index].viewIsSelected ? Color(0xff9DCEFF) : Colors.transparent,
+                                diets[index].viewIsSelected ? Color(0xff92A3FD) : Colors.transparent
+                              ]
+                          ),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'View',
+                            style: TextStyle(
+                                color: diets[index].viewIsSelected ? Colors.white : Color(0xffC58BF2),
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              },
+              separatorBuilder: (context, index){
+                return const SizedBox(width: 25,);
+              },
+              padding: EdgeInsets.only(
+                  left: 20,
+                  right: 20
+              ),
+              itemCount: diets.length),
+        )
+      ],
+    );
   }
 }
