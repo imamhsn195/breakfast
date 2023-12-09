@@ -2,7 +2,7 @@ import 'package:breakfast/models/category_model.dart';
 import 'package:breakfast/models/diet_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import '../models/popular_diet_model.dart';
 class HomePage extends StatefulWidget {
    const HomePage({super.key});
 
@@ -13,10 +13,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<CategoryModel> categories = [];
   List<DietModel> diets = [];
+  List<PopularDietModel> popular_diets = [];
 
   void _getInitialInfo (){
     categories = CategoryModel.getCategories();
     diets = DietModel.getDiets();
+    popular_diets = PopularDietModel.getPopularDiets();
   }
 
   @override
@@ -25,17 +27,108 @@ class _HomePageState extends State<HomePage> {
     return  Scaffold(
       appBar: appBar(),
       backgroundColor: Colors.white ,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: ListView(
         children: [
           _searchField(),
           const SizedBox(height: 40,),
           _categoriesSection(),
           const SizedBox(height: 20,),
-          _dietSection()
+          _dietSection(),
+          const SizedBox(height: 40,),
+          _popular_diets(),
+          const SizedBox(height: 15,)
         ],
       ),
     );
+  }
+
+  Column _popular_diets() {
+    return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(20),
+              child: Text(
+                'Popular',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600
+                ),
+              ),
+            ),
+            const SizedBox(height: 15,),
+            ListView.separated(
+                itemBuilder: (context, index){
+                  return Container(
+                    height: 100,
+                    decoration: BoxDecoration(
+                      color: popular_diets[index].viewIsSelected ? Colors.white : Colors.transparent,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: popular_diets[index].viewIsSelected ? [
+                        BoxShadow(
+                          color: const Color(0xff1D1617).withOpacity(0.07),
+                          offset: const Offset(0,10),
+                          blurRadius: 40,
+                          spreadRadius: 0
+                        )
+                      ] : []
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SvgPicture.asset(popular_diets[index].iconPath,
+                          width: 60,
+                          height: 60,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              popular_diets[index].name,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 13
+                              ),
+                            ),
+                            Text(
+                               "${popular_diets[index].level} | ${popular_diets[index].duration} | ${popular_diets[index].calore}",
+                                style: TextStyle(
+                                  color: Color(0xff7B6F72),
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400
+                                ),
+                            ),
+                          ],
+                        ),
+                        GestureDetector(
+                          onTap: (){
+
+                          },
+                          child: SvgPicture.asset('assets/icons/button.svg',
+                            width: 30,
+                            height: 30,
+                          ),
+                        )
+                      ],
+                    ),
+
+                  );
+                },
+                shrinkWrap: true,
+                separatorBuilder: (context, index){
+                  return  const SizedBox(height: 40,);
+                },
+                padding: const EdgeInsets.only(
+                  left: 20,
+                  right: 20
+                ),
+                itemCount: popular_diets.length
+            )
+          ],
+        );
   }
 
   AppBar appBar() {
