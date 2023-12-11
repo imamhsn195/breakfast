@@ -1,7 +1,7 @@
 import 'package:breakfast/models/category_model.dart';
 import 'package:breakfast/models/diet_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import '../models/popular_diet_model.dart';
 class HomePage extends StatefulWidget {
    const HomePage({super.key});
@@ -30,13 +30,13 @@ class _HomePageState extends State<HomePage> {
       body: ListView(
         children: [
           _searchField(),
-          const SizedBox(height: 40,),
+          const SizedBox(height: 20,),
           _categoriesSection(),
           const SizedBox(height: 20,),
           _dietSection(),
-          const SizedBox(height: 40,),
+          const SizedBox(height: 20,),
           _popular_diets(),
-          const SizedBox(height: 15,)
+          const SizedBox(height: 20,)
         ],
       ),
     );
@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Text(
                               popular_diets[index].name,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w400,
                                 fontSize: 13
@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                                "${popular_diets[index].level} | ${popular_diets[index].duration} | ${popular_diets[index].calore}",
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Color(0xff7B6F72),
                                   fontSize: 13,
                                   fontWeight: FontWeight.w400
